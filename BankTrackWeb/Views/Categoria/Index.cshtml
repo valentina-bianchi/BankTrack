@@ -1,0 +1,73 @@
+﻿@model IEnumerable<Categoria>
+@{
+    ViewData["Title"] = "Index";
+}
+@section Styles {
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.5/css/dataTables.dataTables.css">
+}
+
+<div class="container-fluid px-4">
+    <h2 class="text-primary mt-4">Lista de Categorías</h2>
+    <div class="card mb-4">
+        <div class="card-body">
+            <a asp-controller="Categoria" asp-action="CreateOrEdit" class="btn btn-success">
+                <i class="fa-solid fa-circle-plus"></i> &nbsp;Agregar Categoría
+            </a>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-body">
+            <table id="categorias" class="display" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Numero de Categoria</th>
+                        <th>Icono de Categoria</th>
+                        <th>Descripcion de Categoria</th>
+                        <th>Tipo</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var obj in Model)
+                    {
+                        <tr>
+                            <td>@obj.NombreCategoria</td>
+                            <td>@obj.IconoCategoria</td>
+                            <td>@obj.DescripcionCategoria</td>
+                            <td>@obj.TipoTransaccion.NombreTipo</td>
+                            <td>
+                                <div class="w-75 btn-group" role="group">
+                                    <a asp-controller="Categoria" asp-action="CreateOrEdit" asp-route-id="@obj.IdCategoria" class="btn btn-primary mx-2">
+                                        <i class="fa-regular fa-pen-to-square"></i> &nbsp;Modificar
+                                    </a>
+                                    <a asp-controller="Categoria" asp-action="Delete" asp-route-id="@obj.IdCategoria" class="btn btn-danger mx-2">
+                                        <i class="fa-solid fa-trash"></i> &nbsp;Eliminar
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Numero de Categoria</th>
+                        <th>Icono de Categoria</th>
+                        <th>Descripcion de Categoria</th>
+                        <th>Tipo</th>
+                        <th>Acciones</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/2.1.5/js/dataTables.js"></script>
+    <script>
+        new DataTable('#categorias');
+    </script>
+}
+

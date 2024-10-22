@@ -1,0 +1,115 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE-edge">
+  <meta name="viewport" content="width-device-width, initial-scale-1.0">
+
+    <link rel="stylesheet" href="~/css/Login.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <title>Registrar</title>
+    <script>
+        $(document).ready(function () {
+            $(".submit, .btn-primary").on("click", function (e) {
+                e.preventDefault(); // Previene el comportamiento predeterminado del enlace o botón
+
+                const username = $("#username").val().trim();
+                const email = $("#email").val().trim();
+                const password = $("#pwd").val().trim();
+                const confirmpassword = $("#confirmpwd").val().trim();
+
+                $(".alert").remove(); // Limpiar mensajes de error
+
+                if (email === "" || password === "" || confirmpassword === "" || username === "") {
+                    showError("Por favor, completa todos los campos.");
+                } else if (password !== confirmpassword) {
+                    showError("Las contraseñas no coinciden.");
+                } else {
+                    // Envía el formulario manualmente
+                    $(this).closest("form").submit();
+                }
+            });
+        });
+
+       function showError(message) {
+            // Crea un nuevo elemento de alerta
+            const alertDiv = $('<div class="alert alert-danger"></div>').text(message);
+            $(".error-container").prepend(alertDiv); // Agrega el mensaje al contenedor de error
+        }
+    </script>
+    <style>
+        .alert {
+            background-color: #f8d7da; /* Color de fondo */
+            color: #721c24; /* Color del texto */
+            padding: 10px; /* Espaciado interno */
+            border: 1px solid #f5c6cb; /* Borde del mensaje */
+            border-radius: 5px; /* Bordes redondeados */
+            margin-bottom: 20px; /* Espaciado inferior */
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-box">
+        <h2>Sign Up</h2>
+        <div class="error-container"></div>
+        @if (ViewBag.Creado == null)
+        {
+            <form action="@Url.Action("Registrar","Inicio")" method="post">
+           
+            <div class="user-box">
+                    <input id="username" type="text" name="Username" placeholder="Username" value="@(ViewBag.Username !=null ? ViewBag.Username : "")" required />
+            </div>
+
+            <div class="user-box">
+                    <input id="email" type="email" name="Correo" placeholder="Email" value="@(ViewBag.Correo !=null ? ViewBag.Correo : "")" required />
+            </div>
+
+            <div class="user-box">
+                <input type="password" id="pwd" name="Clave" placeholder="Password" pattern="(?=.*\d)(?=.*[a-z])(?=*[A-Z]).{8,}" minlength="8" maxlength="15" required />
+            </div>
+
+            <div class="user-box">
+                <input type="password" id="confirmpwd" name="ConfirmarClave" placeholder="Confirm Password" pattern="(?=.*\d)(?=.*[a-z])(?=*[A-Z]).{8,}" minlength="8" maxlength="15" required />
+            </div>
+
+            <div class="forgot-password">
+                <p><a class="forgot-password-link" href="@Url.Action("Restablecer","Inicio")">¿Has olvidado tu contraseña?</a></p>
+            </div>
+
+                @if (ViewBag.Mensaje != null)
+                {
+                    <div class="alert alert-danger">
+                        @ViewBag.Mensaje
+                    </div>
+                }
+
+            <a class="submit" href="#">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                Registrarse
+            </a>
+
+            <div class="log-in">
+                <p>¿Ya tienes una cuenta? <a class="log-in-link" href="@Url.Action("Login","Inicio")"><strong>Inicia sesion</strong></a></p>
+            </div>
+        </form>
+        }
+        else
+        {
+            <div class="alert alert-success">
+                <p>@ViewBag.Mensaje</p>
+                <a class="submit" href="@Url.Action("Login","Inicio")">Ingresar</a>
+            </div>
+        }
+    </div>
+   
+</body>
+</html>

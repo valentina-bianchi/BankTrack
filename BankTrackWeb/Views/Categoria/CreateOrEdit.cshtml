@@ -1,0 +1,99 @@
+﻿@model Categoria
+@{
+    ViewData["PageTitle"] = Model?.IdCategoria == 0 ? "Agregar categoría" : "Editar categoría";
+}
+
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <h2 class="text-primary text-center mb-4">
+                        @if (Model == null || Model.IdCategoria == 0)
+                        {
+                            <text>Agregar Categoría</text>
+                        }
+                        else
+                        {
+                            <text>Modificar Categoría</text>
+                        }
+                    </h2>
+                    <form method="post" asp-controller="Categoria" asp-action="CreateOrEdit">
+                        <input type="hidden" asp-for="IdCategoria" />
+                        @* <div class="mb-3">
+                            <label asp-for="NombreCategoria" class="form-label fw-bold"></label>
+                            @if (Model != null && Model.IdCuenta != 0)
+                            {
+                                <input asp-for="NombreCategoria" class="form-control" placeholder="No se puede modificar nombre" readonly />
+                            }
+                            else
+                            {
+                                <input asp-for="NombreCategoria" class="form-control" placeholder="Ingrese nombre de categoria" />
+                            }
+                            <span asp-validation-for="NombreCategoria" class="text-danger"></span>
+                        </div> *@
+                        <div class="mb-3">
+                            <label asp-for="NombreCategoria" class="form-label fw-bold"></label>
+                            <input asp-for="NombreCategoria" class="form-control" placeholder="Ingrese nombre de categoría" />
+                            <span asp-validation-for="NombreCategoria" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="IconoCategoria" class="form-label fw-bold"></label>
+                            <input asp-for="IconoCategoria" class="form-control" placeholder="Ingrese icono de categoría" />
+                            <span asp-validation-for="IconoCategoria" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="DescripcionCategoria" class="form-label fw-bold"></label>
+                            <input asp-for="DescripcionCategoria" class="form-control" placeholder="Ingrese descripción de categoría" />
+                            <span asp-validation-for="DescripcionCategoria" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ddlTipo" class="form-label">Tipo de transacción</label>
+                            <select id="ddlTipo" name="idTipo" class="form-select">
+                                @foreach (var tipo in ViewBag.TiposTransacciones)
+                                {
+                                    @if (Model != null && Model.IdCategoria != 0)
+                                    {
+                                        if (tipo.IdTipoTransaccion == Model.TipoTransaccion.IdTipoTransaccion)
+                                        {
+                                            <option value="@tipo.IdTipoTransaccion">@tipo.NombreTipo</option>
+                                        }
+                                    }
+                                }
+                                @foreach (var tipo in ViewBag.TiposTransacciones)
+                                {
+                                    <option value="@tipo.IdTipoTransaccion">@tipo.NombreTipo</option>
+                                }
+
+                            </select>
+                            <span asp-validation-for="TipoTransaccion" class="text-danger fs-6"></span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <button type="submit" class="btn btn-primary px-4 py-2">
+                                @if (Model == null || Model.IdCategoria == 0)
+                                {
+                                    <text>Crear</text>
+                                }
+                                else
+                                {
+                                    <text>Modificar</text>
+                                }
+                            </button>
+                            <a asp-controller="Categoria" asp-action="Index" class="btn btn-secondary px-4 py-2">
+                                Volver a la lista
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}
+

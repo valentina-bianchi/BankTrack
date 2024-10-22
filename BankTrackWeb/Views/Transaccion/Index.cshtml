@@ -1,0 +1,70 @@
+﻿@model IEnumerable<Transaccion>
+@{
+    ViewData["Title"] = "Index";
+}
+@section Styles {
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.5/css/dataTables.dataTables.css">
+}
+
+<div class="container-fluid px-4">
+    <h2 class="text-primary mt-4">Lista de Cuentas Bancarias</h2>
+    <div class="card mb-4">
+        <div class="card-body">
+            <a asp-controller="Transaccion" asp-action="Create" class="btn btn-success">
+                <i class="fa-solid fa-circle-plus"></i> &nbsp;Agregar Transaccion
+            </a>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-body">
+            <table id="transacciones" class="display" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Id transaccion</th>
+                        <th>Categoria</th>
+                        <th>Monto</th>
+                        <th>Fecha</th>
+                        <th>Nombre y Apellido del titular</th>
+                        <th>Dni del titular</th>
+                        <th>Número de cuenta</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var obj in Model)
+                    {
+                        <tr>
+                            <td>@obj.IdTransaccion</td>
+                            <td>@obj.Categoria.NombreCategoria  @obj.Categoria.IconoCategoria</td>
+                            <td>@obj.Monto</td>
+                            <td>@obj.Fecha</td>
+                            <td>@obj.CuentaBancaria.Cliente.NombreCliente @obj.CuentaBancaria.Cliente.ApellidoCliente</td>
+                            <td>@obj.CuentaBancaria.Cliente.DniCliente</td>
+                            <td>@obj.CuentaBancaria.NumeroCuenta</td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Id transaccion</th>
+                        <th>Categoria</th>
+                        <th>Monto</th>
+                        <th>Fecha</th>
+                        <th>Nombre y Apellido del titular</th>
+                        <th>Dni del titular</th>
+                        <th>Número de cuenta</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/2.1.5/js/dataTables.js"></script>
+    <script>
+        new DataTable('#transacciones');
+    </script>
+}

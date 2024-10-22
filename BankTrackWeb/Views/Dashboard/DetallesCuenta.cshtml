@@ -1,0 +1,41 @@
+﻿@model CuentaBancaria
+
+@{
+    ViewData["Title"] = "Detalles de la Cuenta";
+}
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Nombre del Titular: @Model.Cliente.NombreApellidoDni</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">Número de Cuenta: @Model.NumeroCuenta</li>
+    </ol>
+
+    <div class="row">
+        @if (ViewBag.TotalesPorTipo != null && ViewBag.TotalesPorTipo.Count > 0)
+        {
+            @foreach (var item in ViewBag.TotalesPorTipo)
+            {
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card @(item.Key == "Ingreso" ? "bg-success" : item.Key == "Egreso" ? "bg-danger" : "bg-primary") text-white">
+                        <div class="card-body">
+                            <h5>@item.Key</h5>
+                            <p class="small text-white stretched-link">@item.Value.ToString("C")</p>
+                        </div>
+                        <div class="card-footer d-flex align-items-center justify-content-between">
+                            <a class="small text-white stretched-link" href="@Url.Action("DetallesCategorias", "Dashboard", new { idCuenta = @Model.IdCuenta, tipoTransaccion = @item.Key })">Ver detalles</a>
+                            @* <a class="small text-white stretched-link" href="#">Ver detalles</a> *@
+                            <div class="small text-white">
+                                <i class="fas fa-angle-right"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p>No hay transacciones registradas para esta cuenta.</p>
+        }
+    </div>
+</div>
+

@@ -1,0 +1,75 @@
+﻿@model IEnumerable<CuentaBancaria>
+@{
+    ViewData["Title"] = "Index";
+}
+@section Styles {
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.5/css/dataTables.dataTables.css">
+}
+
+<div class="container-fluid px-4">
+    <h2 class="text-primary mt-4">Lista de Cuentas Bancarias</h2>
+    <div class="card mb-4">
+        <div class="card-body">
+            <a asp-controller="CuentaBancaria" asp-action="CreateOrEdit" class="btn btn-success">
+                <i class="fa-solid fa-circle-plus"></i> &nbsp;Agregar Cuenta
+            </a>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-body">
+            <table id="cuentasbancarias" class="display" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Numero de Cuenta</th>
+                        <th>Saldo Actual</th>
+                        <th>Saldo objetivo</th>
+                        <th>Nombre y Apellido del titular</th>
+                        <th>Dni del titular</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var obj in Model)
+                    {
+                        <tr>
+                            <td>@obj.NumeroCuenta</td>
+                            <td>@obj.SaldoActual</td>
+                            <td>@obj.SaldoObjetivo</td>
+                            <td>@obj.Cliente.NombreCliente @obj.Cliente.ApellidoCliente</td>
+                            <td>@obj.Cliente.DniCliente</td>
+                            <td>
+                                <div class="w-75 btn-group" role="group">
+                                    <a asp-controller="CuentaBancaria" asp-action="CreateOrEdit" asp-route-id="@obj.IdCuenta" class="btn btn-primary mx-2">
+                                        <i class="fa-regular fa-pen-to-square"></i> &nbsp;Modificar
+                                    </a>
+                                    <a asp-controller="CuentaBancaria" asp-action="Delete" asp-route-id="@obj.IdCuenta" class="btn btn-danger mx-2">
+                                        <i class="fa-solid fa-trash"></i> &nbsp;Eliminar
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Numero de Cuenta</th>
+                        <th>Saldo Actual</th>
+                        <th>Saldo objetivo</th>
+                        <th>Nombre y Apellido del titular</th>
+                        <th>Dni del titular</th>
+                        <th>Acciones</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/2.1.5/js/dataTables.js"></script>
+    <script>
+        new DataTable('#cuentasbancarias');
+    </script>
+}

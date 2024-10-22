@@ -1,0 +1,43 @@
+﻿@model CuentaBancaria
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <h2 class="text-primary text-center mb-4">Eliminar Cuenta Bancaria</h2>
+                    <form method="post" asp-action="Delete">
+                        <input type="hidden" asp-for="IdCuenta" />
+                        <div class="mb-3">
+                            <label asp-for="NumeroCuenta" class="form-label fw-bold"></label>
+                            <input asp-for="NumeroCuenta" class="form-control" placeholder="Ingrese número de cuenta" readonly />
+                            <span asp-validation-for="NumeroCuenta" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="SaldoObjetivo" class="form-label fw-bold"></label>
+                            <input asp-for="SaldoObjetivo" class="form-control" placeholder="Ingrese apellido del cliente" />
+                            <span asp-validation-for="SaldoObjetivo" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="SaldoActual" class="form-label fw-bold"></label>
+                            <input asp-for="SaldoActual" class="form-control" value="0" readonly />
+                            <span asp-validation-for="SaldoActual" class="text-danger"></span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <button type="submit" class="btn btn-danger px-4 py-2">Eliminar</button>
+                            <a asp-controller="CuentaBancaria" asp-action="Index" class="btn btn-secondary px-4 py-2">
+                                Volver a la lista
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

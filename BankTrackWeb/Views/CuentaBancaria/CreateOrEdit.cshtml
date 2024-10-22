@@ -1,0 +1,111 @@
+﻿@model CuentaBancaria
+@{
+    ViewData["PageTitle"] = Model?.IdCuenta == 0 ? "Agregar cuenta bancaria" : "Editar cuenta bancaria";
+}
+
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <h2 class="text-primary text-center mb-4">
+                        @if (Model == null || Model.IdCuenta == 0)
+                        {
+                            <text>Agregar Cuenta Bancaria</text>
+                        }
+                        else
+                        {
+                            <text>Modificar Cuenta Bancaria</text>
+                        }
+                    </h2>
+                    <form method="post" asp-controller="CuentaBancaria" asp-action="CreateOrEdit">
+                        <input type="hidden" asp-for="IdCuenta" />
+                        <div class="mb-3">
+                            <label asp-for="NumeroCuenta" class="form-label fw-bold"></label>
+                            @if (Model!= null && Model.IdCuenta != 0)
+                            {
+                                <input asp-for="NumeroCuenta" class="form-control" placeholder="No se puede modificar número de cuenta" readonly/>
+                            }
+                            else
+                            {
+                                <input asp-for="NumeroCuenta" class="form-control" placeholder="Ingrese número de cuenta" />
+                            }
+                            <span asp-validation-for="NumeroCuenta" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="SaldoObjetivo" class="form-label fw-bold"></label>
+                            <input asp-for="SaldoObjetivo" class="form-control" placeholder="Ingrese saldo objetivo" />
+                            <span asp-validation-for="SaldoObjetivo" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            @if (Model!= null && Model.IdCuenta != 0)
+                            {
+                                <label asp-for="SaldoActual" class="form-label fw-bold"></label>
+                                <input asp-for="SaldoActual" class="form-control" readonly />
+                            }
+                            else
+                            {
+                                <input type="hidden" asp-for="SaldoActual" value="0.0" />
+                            }
+                            <span asp-validation-for="SaldoActual" class="text-danger"></span>
+                        </div>
+                     
+                       @*  <div class="mb-3">
+                            <label for="ddlCliente" class="form-label">Cliente</label>
+                            <select id="ddlcliente" name="idcliente" class="form-select">
+                                @foreach (var cliente in ViewBag.Clientes)
+                                {
+                                    if(Model.Cliente != null)
+                                    {
+                                        if (cliente.IdCliente == Model.Cliente.IdCliente)
+                                        {
+                                            <option value="@cliente.IdCliente">@cliente.NombreApellidoDni</option>
+                                        }
+                                    }
+                                    
+                                }
+                                @foreach (var cliente in ViewBag.Clientes)
+                                {
+                                    <option value="@cliente.IdCliente">@cliente.NombreApellidoDni</option>
+                                }
+                                
+                            </select>
+                            <span asp-validation-for="Cliente.IdCliente" class="text-danger fs-6"></span>
+                        </div> *@
+                        <div class="mb-3">
+                            <label class="form-label fw-bold" for="cliente">Cliente</label>
+                            <select id="cliente" class="form-control" asp-for="Cliente.IdCliente" asp-items="ViewBag.Clientes">
+                                <option value="">Seleccione un cliente</option>
+                            </select>
+                            <span asp-validation-for="Cliente.IdCliente" class="text-danger"></span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <button type="submit" class="btn btn-primary px-4 py-2">
+                                @if (Model== null || Model.IdCuenta == 0)
+                                {
+                                    <text>Crear</text>
+                                }
+                                else
+                                {
+                                    <text>Modificar</text>
+                                }
+                            </button>
+                            <a asp-controller="CuentaBancaria" asp-action="Index" class="btn btn-secondary px-4 py-2">
+                                Volver a la lista
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}
+

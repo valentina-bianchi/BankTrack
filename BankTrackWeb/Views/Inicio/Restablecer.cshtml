@@ -1,0 +1,104 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+
+    <link rel="stylesheet" href="@Url.Content("~/css/Login.css")" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Restablecer</title>
+    <script>
+        $(document).ready(function () {
+            $(".submit, .btn-primary").on("click", function (e) {
+                e.preventDefault(); // Previene el comportamiento predeterminado del enlace o botón
+
+                const email = $("#email").val().trim();
+
+                $(".alert").remove(); // Limpiar mensajes de error
+
+                if (email === "") {
+                    showError("Por favor, completa todos los campos.");
+                } else {
+                    // Envía el formulario manualmente
+                    $(this).closest("form").submit();
+                }
+            });
+        });
+
+        function showError(message) {
+            // Crea un nuevo elemento de alerta
+            const alertDiv = $('<div class="alert alert-danger"></div>').text(message);
+            $(".error-container").prepend(alertDiv); // Agrega el mensaje al principio del contenedor de login
+        }
+    </script>
+    <style>
+        .alert {
+            background-color: #f8d7da; /* Color de fondo */
+            color: #721c24; /* Color del texto */
+            padding: 10px; /* Espaciado interno */
+            border: 1px solid #f5c6cb; /* Borde del mensaje */
+            border-radius: 5px; /* Bordes redondeados */
+            margin-bottom: 20px; /* Espaciado inferior */
+        }
+    </style>
+</head>
+<body>
+    <div class="password-recovery-box">
+        <h2>¿Has olvidado tu contraseña?</h2>
+        <div class="error-container"></div>
+        @if (ViewBag.Restablecido == null)
+
+        {
+            <form action="@Url.Action("Restablecer","Inicio")" method="post">
+                <div class="log-in">
+                    <p>Ingrese su dirección de correo electrónico y le enviaremos un enlace para restablecer su contraseña.</p>
+                </div>
+                <div class="user-box">
+                    <input id="email" type="email" name="correo" placeholder="Email" value="@(ViewBag.Correo !=null ? ViewBag.Correo : "")" required />
+                </div>
+
+                @if (ViewBag.Mensaje != null)
+
+                {
+                    <div class="alert alert-danger">
+                        @ViewBag.Mensaje
+                    </div>
+                }
+
+                <a class="submit" href="#">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    Solicitar enlace de recupero
+                </a>
+                <div class="log-in">
+                    <p>Volver a <a class="log-in-link" href="@Url.Action("Login","Inicio")"><strong>Log In</strong></a></p>
+                </div>
+
+                <div class="sign-up">
+                    <p>¿No tiene una nueva? <a class="sign-up-link" href="@Url.Action("Registrar","Inicio")"><strong>Registrarse</strong></a></p>
+                </div>
+
+            </form>
+        }
+
+        else
+        {
+            <div class="alert alert-success">
+                <p>Su contraseña fue restablecida, le enviamos un mensaje su correo para restablecer.</p>
+                <a class="submit" href="@Url.Action("Login","Inicio")">Ingresar</a>
+            </div>
+        }
+    </div>
+    <div class="footer-div">
+        <footer>
+            <p>2024 Valentina Bianchi. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>

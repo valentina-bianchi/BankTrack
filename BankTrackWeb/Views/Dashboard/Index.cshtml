@@ -1,0 +1,87 @@
+﻿@model IEnumerable<CuentaBancaria>
+@{
+    ViewData["Title"] = "Index";
+}
+@section Styles {
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.5/css/dataTables.dataTables.css">
+}
+
+<div class="container-fluid px-4">
+    <h2 class="text-primary mt-4">Lista de Cuentas Bancarias</h2>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <table id="cuentasbancarias" class="display" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Numero de Cuenta</th>
+                        <th>Saldo Actual</th>
+                        <th>Saldo objetivo</th>
+                        <th>Nombre y Apellido del titular</th>
+                        <th>Dni del titular</th>
+                        <th>Semaforo</th>
+                        <th>Accion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var obj in Model)
+                    {
+                        var porcentaje = (obj.SaldoActual / obj.SaldoObjetivo) * 100;
+                        string colorSemaforo;
+
+                        if (porcentaje >= 100)
+                        {
+                            colorSemaforo = "green"; // Saldo objetivo alcanzado o superado
+                        }
+                        else if (porcentaje >= 50)
+                        {
+                            colorSemaforo = "yellow"; // Saldo actual entre 50% y 100% del objetivo
+                        }
+                        else
+                        {
+                            colorSemaforo = "red"; // Saldo actual menor al 50% del objetivo
+                        }
+
+                        <tr>
+                            <td>@obj.NumeroCuenta</td>
+                            <td>@obj.SaldoActual</td>
+                            <td>@obj.SaldoObjetivo</td>
+                            <td>@obj.Cliente.NombreCliente @obj.Cliente.ApellidoCliente</td>
+                            <td>@obj.Cliente.DniCliente</td>
+                            <td>
+                                <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
+                                    <span style="width:20px; height:20px; display:inline-block; background-color:@colorSemaforo; border-radius:50%;"></span>
+                                </div>
+                            </td>
+                            <td>
+                                <a asp-controller="Dashboard" asp-action="DetallesCuenta" asp-route-id="@obj.IdCuenta" class="btn btn-primary mx-2">
+                                    Ver detalles
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Numero de Cuenta</th>
+                        <th>Saldo Actual</th>
+                        <th>Saldo objetivo</th>
+                        <th>Nombre y Apellido del titular</th>
+                        <th>Dni del titular</th>
+                        <th>Semaforo</th>
+                        <th>Accion</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/2.1.5/js/dataTables.js"></script>
+    <script>
+        new DataTable('#cuentasbancarias');
+    </script>
+}
