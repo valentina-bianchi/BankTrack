@@ -4,7 +4,9 @@
     var tipoTransaccion = ViewBag.TipoTransaccion;
 }
 
-<h2>Detalles de Categorías - Tipo de Transacción: @tipoTransaccion</h2>
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Detalles de Categorías - Tipo de Transacción: @tipoTransaccion</h1>
+</div>
 
 @if (TempData["error"] != null)
 {
@@ -13,24 +15,36 @@
 
 @if (categoriasConGastos != null && categoriasConGastos.Any())
 {
-    <!-- Tabla de categorías y gastos -->
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Categoría</th>
-                <th>Total Gastado</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var categoria in categoriasConGastos)
-            {
-                <tr>
-                    <td>@categoria.Key</td>
-                    <td>@categoria.Value.ToString("C")</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="card mb-4">
+        <div class="card-body">
+            <!-- Tabla de categorías y gastos -->
+            <table id="detallesCategoria" class="display" style="width:100%">
+                @* class="table table-bordered" *@
+                <thead>
+                    <tr>
+                        <th>Categoría</th>
+                        <th>Total Gastado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var categoria in categoriasConGastos)
+                    {
+                        <tr>
+                            <td>@categoria.Key</td>
+                            <td>@categoria.Value.ToString("C")</td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Categoría</th>
+                        <th>Total Gastado</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+   
     <div class="col-lg-6">
         <div class="card mb-4">
             <div class="card-header">
@@ -51,6 +65,23 @@ else
 }
 
 <a href="@Url.Action("DetallesCuenta", "Dashboard", new { id = ViewBag.IdCuenta })" class="btn btn-primary">Volver a Detalles de Cuenta</a>
+
+@section Scripts {
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- DataTables CSS and JS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+    <!-- Inicialización de DataTables -->
+    <script>
+        $(document).ready(function () {
+            $('#detallesCategoria').DataTable();
+        });
+    </script>
+}
+
 
 <!-- Script para incluir Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
