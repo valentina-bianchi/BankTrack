@@ -47,17 +47,14 @@ namespace BankTrackWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateOrEdit(Categoria categoria)
         {
-            //// Remover validación para la propiedad Cliente
-            //ModelState.Remove("Cliente");
+            if (categoria.TipoTransaccion?.IdTipoTransaccion != 0)
+            {
+                categoria.TipoTransaccion = ListarTiposTransacciones()
+                    .FirstOrDefault(t => t.IdTipoTransaccion == categoria.TipoTransaccion.IdTipoTransaccion);
+                ModelState.Remove("TipoTransaccion.NombreTipo");
+            }
             if (ModelState.IsValid)
             {
-                //var tiposTransaccion = ListarTiposTransacciones().FirstOrDefault(x => x.IdTipoTransaccion == categoria.TipoTransaccion.IdTipoTransaccion);
-                //if (tiposTransaccion == null)
-                //{
-                //    TempData["error"] = "No se encontró tipo de transacción";
-                //    return View();
-                //}
-                //cuenta.Cliente = cliente;
                 var _listaCategorias = await _categoriaRepository.Listar();
                 var categoriaEncontrada = _listaCategorias.FirstOrDefault(x => x.NombreCategoria == categoria.NombreCategoria);
                 if (categoria.IdCategoria == 0)

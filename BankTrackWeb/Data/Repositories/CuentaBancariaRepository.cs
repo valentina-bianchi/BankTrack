@@ -109,8 +109,8 @@ namespace BankTrackWeb.Repositories
                 command.Transaction = sqlTransaction;
                 command.Parameters.Add("@id_cuenta", System.Data.SqlDbType.Int).Value = cuentaBancaria.IdCuenta;
                 command.Parameters.Add("@numero_cuenta", System.Data.SqlDbType.BigInt).Value = cuentaBancaria.NumeroCuenta;
-                command.Parameters.Add("@saldo_objetivo", System.Data.SqlDbType.Decimal).Value = cuentaBancaria.SaldoObjetivo;
-                command.Parameters.Add("@saldo_actual", System.Data.SqlDbType.Decimal).Value = cuentaBancaria.SaldoActual;
+                command.Parameters.Add("@saldo_objetivo", System.Data.SqlDbType.Decimal).Value = Convert.ToDecimal(cuentaBancaria.SaldoObjetivo);
+                command.Parameters.Add("@saldo_actual", System.Data.SqlDbType.Decimal).Value = Convert.ToDecimal(cuentaBancaria.SaldoActual);
                 command.Parameters.Add("@dni_cliente", System.Data.SqlDbType.BigInt).Value = cuentaBancaria.Cliente.DniCliente;
                 command.ExecuteNonQuery();
 

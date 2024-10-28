@@ -33,7 +33,8 @@ namespace BankTrackWeb.Controllers
                 TempData["error"] = "Primero debe cargar categorias para hacer transacciones";
                 RedirectToAction("Index");
             }
-
+            ViewBag.Cuentas = result;
+            ViewBag.Categorias = result2;   
             return View(new Transaccion());
         }
 
@@ -41,66 +42,74 @@ namespace BankTrackWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Transaccion transaccion)
         {
-            // Remover validación para la propiedad Cliente
-            ModelState.Remove("Transaccion");
+            ModelState.Remove("Categoria.IconoCategoria");
+            ModelState.Remove("Categoria.NombreCategoria");
+            ModelState.Remove("Categoria.TipoTransaccion");
+            ModelState.Remove("Categoria.DescripcionCategoria");
+            ModelState.Remove("CuentaBancaria.Cliente");
             if (ModelState.IsValid)
             {
-                var cuenta = _transaccionRepository.ListarCuentas().FirstOrDefault(x => x.NumeroCuenta == transaccion.CuentaBancaria.NumeroCuenta);
+                // Busco cuenta bancaria
+                var cuenta = Cuentas().FirstOrDefault(c => c.IdCuenta == transaccion.CuentaBancaria.IdCuenta);
                 if (cuenta == null)
                 {
                     TempData["error"] = "No se encontró cuenta bancaria";
+                    ViewBag.Cuentas = _transaccionRepository.ListarCuentas();
+                    ViewBag.Categorias = _transaccionRepository.ListarCategorias();
                     return View();
                 }
-            //    cuenta.Cliente = cliente;
-            //    var _listaCuentas = await _cuentaBancariaRepository.Listar();
-            //    var cuentaEncontrada = _listaCuentas.FirstOrDefault(x => x.NumeroCuenta == cuenta.NumeroCuenta);
-            //    if (cuenta.IdCuenta == 0)
-            //    {
-            //        if (cuentaEncontrada != null)
-            //        {
-            //            TempData["error"] = "Ya existe una cuenta con ese número.";
-            //            ListarClientes();
-            //            return View();
-            //        }
+                transaccion.CuentaBancaria = cuenta;
+                //Busco categoria
+                var categoria = Categorias().FirstOrDefault(c => c.IdCategoria == transaccion.Categoria.IdCategoria);
+                if (categoria == null)
+                {
+                    TempData["error"] = "No se encontró la categoría";
+                    ViewBag.Cuentas = _transaccionRepository.ListarCuentas();
+                    ViewBag.Categorias = _transaccionRepository.ListarCategorias();
+                    return View();
+                }
+                transaccion.Categoria = categoria;
+                if (transaccion.Categoria.TipoTransaccion.Aumenta == false && transaccion.CuentaBancaria.SaldoActual < transaccion.Monto)
+                {
+                    TempData["error"] = "No tiene saldo suficiente para realizar esa transacción";
+                    ViewBag.Cuentas = _transaccionRepository.ListarCuentas();
+                    ViewBag.Categorias = _transaccionRepository.ListarCategorias();
+                    return View();
+                }
+                bool _resultado = await _transaccionRepository.Guardar(transaccion);
 
-            //        bool _resultado = await _cuentaBancariaRepository.Guardar(cuenta);
-
-            //        if (_resultado)
-            //        {
-            //            TempData["success"] = "Cuenta bancaria agregada correctamente";
-            //            return RedirectToAction("Index");
-            //        }
-            //        else
-            //        {
-            //            TempData["error"] = "No se pudo agregar la cuenta";
-            //            return RedirectToAction("Index");
-            //        }
-            //    }
-            //    else
-            //    {
-            //        if (cuentaEncontrada == null)
-            //        {
-            //            TempData["error"] = "No se encontró cuenta con ese número.";
-            //            return RedirectToAction("Index");
-            //        }
-            //        bool _resultado = await _cuentaBancariaRepository.Modificar(cuenta);
-
-            //        if (_resultado)
-            //        {
-            //            TempData["success"] = "Cuenta bancaria modificada correctamente";
-            //            return RedirectToAction("Index");
-            //        }
-            //        else
-            //        {
-            //            TempData["error"] = "No se pudo modificar la cuenta";
-            //            ListarClientes();
-            //        }
-            //    }
-            //    return RedirectToAction(nameof(Index));
-
+                if (_resultado)
+                {
+                    TempData["success"] = "Transacción realizada con éxito";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["error"] = "No se pudo agregar la transacción";
+                    return RedirectToAction("Index");
+                }
             }
-            //ListarClientes();
+            ViewBag.Cuentas = _transaccionRepository.ListarCuentas();
+            ViewBag.Categorias = _transaccionRepository.ListarCategorias();
             return View();
+        }
+        [NonAction]
+        public List<CuentaBancaria> Cuentas()
+        {
+            if (_transaccionRepository != null)
+            {
+                return _transaccionRepository.ListarCuentas();
+            }
+            return new List<CuentaBancaria>();
+        }
+        [NonAction]
+        public List<Categoria> Categorias()
+        {
+            if (_transaccionRepository != null)
+            {
+                return _transaccionRepository.ListarCategorias();
+            }
+            return new List<Categoria>();
         }
     }
 }

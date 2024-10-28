@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Transactions;
 
 namespace BankTrackWeb.Models
@@ -14,5 +15,13 @@ namespace BankTrackWeb.Models
         [Display(Name = "Saldo Actual")]
         public decimal SaldoActual { get; set; }
         public ICollection<Transaccion>? Transacciones { get; set; }
+        [NotMapped]
+        public string? NombreCuenta
+        {
+            get
+            {
+                return "Cuenta: " + this.NumeroCuenta;
+            }
+        }
     }
 }

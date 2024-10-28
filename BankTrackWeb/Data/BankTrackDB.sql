@@ -138,8 +138,8 @@ CREATE PROCEDURE SP_MODIFICARCUENTA
 @id_cuenta INT,
 @numero_cuenta bigint,
 @dni_cliente bigint,
-@saldo_objetivo decimal(10,5),
-@saldo_actual decimal(10,5)
+@saldo_objetivo decimal(25,5),
+@saldo_actual decimal(25,5)
 AS
 BEGIN
     UPDATE CuentasBancarias
@@ -255,9 +255,10 @@ BEGIN
     WHERE tr.id_cuenta = @IdCuenta
     GROUP BY t.nombre_tipo;
 END;
---TRANSACCION
 
-go
+
+--TRANSACCION
+GO
 CREATE PROCEDURE SP_AGREGARTRANSACCION
     @id_categoria INT,
     @fecha DATETIME,
@@ -265,6 +266,36 @@ CREATE PROCEDURE SP_AGREGARTRANSACCION
     @id_cuenta INT
 AS
 BEGIN
+    BEGIN TRANSACTION;
+    
+    -- Variables auxiliares
+    DECLARE @aumenta BIT;
+
+    -- Obtener el valor de 'aumenta' del tipo de transacción
+    SELECT @aumenta = t.aumenta
+    FROM Categorias c
+    JOIN Tipos_Transacciones t ON c.id_tipo_transaccion = t.id_tipo_transaccion
+    WHERE c.id_categoria = @id_categoria;
+
+    -- Insertar la transacción
     INSERT INTO Transacciones (id_categoria, fecha, monto, id_cuenta)
-    VALUES ((Select id_categoria from Categorias where id_categoria = @id_categoria), @Fecha, @Monto, (Select id_cuenta from CuentasBancarias where id_cuenta = @id_cuenta))
-END
+    VALUES (@id_categoria, @fecha, @monto, @id_cuenta);
+
+    -- Modificar el saldo actual de la cuenta en base al valor de 'aumenta'
+    IF @aumenta = 1
+    BEGIN
+        UPDATE CuentasBancarias
+        SET saldo_actual = saldo_actual + @monto
+        WHERE id_cuenta = @id_cuenta;
+    END
+    ELSE
+    BEGIN
+        UPDATE CuentasBancarias
+        SET saldo_actual = saldo_actual - @monto
+        WHERE id_cuenta = @id_cuenta;
+    END
+
+    COMMIT TRANSACTION;
+END;
+GO
+

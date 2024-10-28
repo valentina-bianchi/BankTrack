@@ -49,26 +49,20 @@
                             <span asp-validation-for="DescripcionCategoria" class="text-danger"></span>
                         </div>
                         <div class="mb-3">
-                            <label for="ddlTipo" class="form-label">Tipo de transacción</label>
-                            <select id="ddlTipo" name="idTipo" class="form-select">
+                            <label asp-for="TipoTransaccion" class="form-label fw-bold">Tipo de transacción</label>
+                            <select asp-for="TipoTransaccion.IdTipoTransaccion" class="form-select">
+                                <option value="">Seleccione un tipo</option>
                                 @foreach (var tipo in ViewBag.TiposTransacciones)
                                 {
-                                    @if (Model != null && Model.IdCategoria != 0)
-                                    {
-                                        if (tipo.IdTipoTransaccion == Model.TipoTransaccion.IdTipoTransaccion)
-                                        {
-                                            <option value="@tipo.IdTipoTransaccion">@tipo.NombreTipo</option>
-                                        }
-                                    }
+                                    <option value="@tipo.IdTipoTransaccion">
+                                        @tipo.NombreTipo
+                                    </option>
                                 }
-                                @foreach (var tipo in ViewBag.TiposTransacciones)
-                                {
-                                    <option value="@tipo.IdTipoTransaccion">@tipo.NombreTipo</option>
-                                }
-
                             </select>
                             <span asp-validation-for="TipoTransaccion" class="text-danger fs-6"></span>
                         </div>
+
+
                         <div class="d-flex justify-content-between">
                             <button type="submit" class="btn btn-primary px-4 py-2">
                                 @if (Model == null || Model.IdCategoria == 0)

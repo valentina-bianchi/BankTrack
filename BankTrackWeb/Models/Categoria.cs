@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BankTrackWeb.Models
 {
@@ -12,5 +13,13 @@ namespace BankTrackWeb.Models
         [Display(Name = "Descripcion de Categoria")]
         public string DescripcionCategoria { get; set; }
         public TipoTransaccion TipoTransaccion { get; set; }
+        [NotMapped]
+        public string? NombreIcono
+        {
+            get
+            {
+                return this.NombreCategoria + " " + this.IconoCategoria;
+            }
+        }
     }
 }

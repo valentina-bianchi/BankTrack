@@ -134,7 +134,7 @@ namespace BankTrackWeb.Repositories
                     var IdCategoria = (int)reader["id_categoria"];
                     transaccion.Categoria = ListarCategorias().FirstOrDefault(c => c.IdCategoria == IdCategoria);
                     //mapeo cuenta
-                    var IdCuenta = (int)reader["id_categoria"];
+                    var IdCuenta = (int)reader["id_cuenta"];
                     transaccion.CuentaBancaria = ListarCuentas().FirstOrDefault(c => c.IdCuenta == IdCuenta);
 
                     lista.Add(transaccion);

@@ -1,0 +1,101 @@
+﻿@model Transaccion
+@{
+    ViewData["PageTitle"] = "Agregar nueva transaccion";
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body p-4">
+                        <h2 class="text-primary text-center mb-4">
+                             <text>Agregar Nueva Transaccion</text>
+                        </h2>
+                        <form method="post" asp-controller="Transaccion" asp-action="Create">
+                            <input type="hidden" asp-for="IdTransaccion" />
+                            
+                            <div class="mb-3">
+                                <label asp-for="Monto" class="form-label fw-bold"></label>
+                                <input asp-for="Monto" class="form-control" placeholder="Ingrese monto" />
+                                <span asp-validation-for="Monto" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="Fecha" class="form-label fw-bold"></label>
+                                <input asp-for="Fecha" class="form-control" placeholder="Ingrese fecha" id="fechaInput" />
+                                <span asp-validation-for="Fecha" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="Categoria" class="form-label fw-bold">Categoría</label>
+                                <select asp-for="Categoria.IdCategoria" class="form-select">
+                                    <option value="">Seleccione una categoría</option>
+                                    @foreach (var cat in ViewBag.Categorias)
+                                    {
+                                        <option value="@cat.IdCategoria">
+                                            @cat.NombreIcono
+                                        </option>
+                                    }
+                                </select>
+                                <span asp-validation-for="Categoria" class="text-danger fs-6"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="CuentaBancaria" class="form-label fw-bold">Cuenta Bancaria</label>
+                                <select asp-for="CuentaBancaria.IdCuenta" class="form-select">
+                                    <option value="">Seleccione una cuenta bancaria</option>
+                                    @foreach (var cta in ViewBag.Cuentas)
+                                    {
+                                        <option value="@cta.IdCuenta">
+                                            @cta.NombreCuenta
+                                        </option>
+                                    }
+                                </select>
+                                <span asp-validation-for="CuentaBancaria" class="text-danger fs-6"></span>
+                            </div>
+
+                            <div class="d-flex justify-content-between">
+                                <button type="submit" class="btn btn-primary px-4 py-2">
+                                        <text>Crear</text>
+                                </button>
+                                <a asp-controller="Transaccion" asp-action="Index" class="btn btn-secondary px-4 py-2">
+                                    Volver a la lista
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Al cargar la página, establece la fecha de hoy en el campo de fecha
+        document.addEventListener("DOMContentLoaded", function() {
+            const fechaInput = document.getElementById("fechaInput");
+
+            // Obtener la fecha de hoy en formato YYYY-MM-DD
+            const today = new Date().toISOString().split("T")[0];
+
+            // Asignar la fecha de hoy al campo de fecha solo si está vacío
+            if (!fechaInput.value) {
+                fechaInput.value = today;
+            }
+        });
+    </script>
+</body>
+</html>
+
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}
+
+
+
+
