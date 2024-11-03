@@ -9,7 +9,26 @@
 
 <div class="container-fluid px-4">
     <h2 class="text-primary mt-4">Lista de Cuentas Bancarias</h2>
+    <!-- Recuadro con significado de los círculos de semáforo -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="text-primary">Significado del Semáforo</h5>
+            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                <span style="width: 20px; height: 20px; background-color: green; border-radius: 50%; display: inline-block; margin-right: 10px;"></span>
+                <span>Alcanzado: Saldo objetivo alcanzado o superado</span>
+            </div>
+            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                <span style="width: 20px; height: 20px; background-color: yellow; border-radius: 50%; display: inline-block; margin-right: 10px;"></span>
+                <span>Intermedio: Saldo actual entre 50% y 100% del objetivo</span>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <span style="width: 20px; height: 20px; background-color: red; border-radius: 50%; display: inline-block; margin-right: 10px;"></span>
+                <span>Crítico: Saldo actual menor al 50% del objetivo</span>
+            </div>
+        </div>
+    </div>
 
+    
     <div class="card mb-4">
         <div class="card-body">
             <table id="cuentasbancarias" class="display" style="width:100%">
@@ -76,6 +95,7 @@
             </table>
         </div>
     </div>
+    
 </div>
 
 @section Scripts {

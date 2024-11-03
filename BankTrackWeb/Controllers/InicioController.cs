@@ -23,7 +23,7 @@ namespace BankTrackWeb.Controllers
         [HttpPost]
         public ActionResult Login(string correo, string clave)
         {
-            Usuario usuario = DBUsuario.Validar(correo, UtilidadServicio.ConvertirSHA256(clave));
+            Usuario usuario = DBUsuario.Validar(correo, UtilidadServicio.ConvertirSHA256(clave)); //Valido contraseña
 
             if (usuario != null)
             {
